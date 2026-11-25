@@ -23,11 +23,11 @@
 
 ### 示例
 ```bash
-# 输入 ls 后按 Tab，可能补全为 ls -l
-ls<Tab>
+# 输入命令或路径前缀，再按 Tab 补全；Tab 不会自动添加 `-l` 选项
+cd /u<Tab>
 
 # 输入 cd /u 后按 Tab，可能补全为 cd /usr
-cd /u<Tab>
+cd /usr
 ```
 
 ## 终端快捷键

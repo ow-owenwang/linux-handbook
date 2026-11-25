@@ -37,7 +37,7 @@ cat /etc/os-release
 lsb_release -a
 
 # 查看系统版本（Ubuntu）
-cat /etc/issue          # 查看是否有版本更新
+cat /etc/issue          # 查看登录前展示的系统标识，不代表可升级版本
 lsb_release -a          # 查看系统当前版本
 
 # 查看系统版本（Mac）
@@ -45,12 +45,10 @@ uname
 uname -r
 ```
 
-### 系统更新（Ubuntu）
+### 更新已安装软件包（Ubuntu）
 ```bash
-# 查看是否有版本更新
-cat /etc/issue
-
-# 如果有新版本，执行以下命令
+# 更新软件包索引，再升级已安装的软件包；这不是发行版升级
+sudo apt update
 sudo apt-get upgrade
 ```
 
@@ -60,7 +58,7 @@ hostname                # 查看当前主机名
 cat /etc/hostname       # 查看主机名配置文件
 
 # 修改主机名
-hostnamectl set-hostname newname
+sudo hostnamectl set-hostname newname
 # 或
 vim /etc/hostname       # 编辑配置文件（需要重启生效）
 # 或（CentOS/RHEL）
@@ -77,5 +75,5 @@ lsb_release -a
 
 # 查看和修改主机名
 hostname
-hostnamectl set-hostname newname
+sudo hostnamectl set-hostname newname
 ```

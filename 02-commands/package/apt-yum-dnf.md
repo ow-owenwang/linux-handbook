@@ -47,7 +47,7 @@ dnf install package              # dnf 是 yum 的下一代版本
 - `search`: 搜索软件包
 
 ## 易错点
-- `update` 和 `upgrade` 的区别：update 更新列表，upgrade 升级软件
+- 在 APT 中，`update` 刷新软件包索引，`upgrade` 升级已安装软件；在 DNF/YUM 中，`update` 通常也执行软件包升级
 - 需要 root 权限（使用 sudo）
 - Ubuntu 平台推荐使用 apt-get，CentOS/RHEL 使用 yum/dnf
 

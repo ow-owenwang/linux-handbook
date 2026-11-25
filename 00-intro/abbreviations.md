@@ -10,20 +10,20 @@
 ### 基础命令
 - `ls`: list（列出目录内容）
 - `cd`: Change Directory（改变目录）
-- `pwd`: print work directory（打印当前目录，显示出当前工作目录的绝对路径）
+- `pwd`: print working directory（显示当前工作目录）
 - `su`: switch user（切换用户）
 - `rm`: Remove（删除目录或文件）
 - `rmdir`: Remove Directory（删除目录）
 - `mkdir`: Make Directory（创建目录）
 - `mv`: Move file（移动文件）
 - `cp`: Copy file（复制文件）
-- `cat`: concatenate（连锁，cat file1 file2>>file3 把文件1和文件2的内容联合起来放到file3中）
+- `cat`: concatenate（连接并输出文件内容；如 `cat file1 file2 >> file3` 会追加到 `file3`）
 - `ln`: Link files（链接文件）
 - `touch`: 创建空文件或更新时间戳
 
 ### 系统命令
 - `ps`: process status（进程状态，类似于 windows 的任务管理器）
-- `df`: disk free（显示磁盘可用空间数目信息及空间结点信息）
+- `df`: disk free（显示文件系统空间使用情况；`-i` 查看 inode）
 - `du`: Disk usage（显示目录或文件的大小）
 - `uname`: Unix name（显示系统信息）
 - `man`: Manual（手册、指南）
@@ -43,13 +43,13 @@
 - `nohup`: No HangUP（不挂起）
 
 ### 包管理
-- `rpm`: redhat package manager（红帽子打包管理器）
+- `rpm`: RPM Package Manager（递归名称，管理 RPM 软件包）
 - `dpkg`: Debian package manager（Debian 包管理器）
 - `apt`: Advanced package tool（高级包工具，Debian 或基于 Debian 的发行版中提供）
 
 ### 其他命令
 - `tar`: Tape archive（磁带归档）
-- `dd`: Disk Dump（本来应根据其功能描述"Convert an copy"命名为"cc"，但"cc"已经被用以代表"C Complier"，所以命名为"dd"）
+- `dd`: 按块复制并可转换数据；名称来源有多种说法，不宜当作可靠缩写记忆
 - `ldd`: List dynamic dependencies（列出动态依赖）
 - `insmod`: install module（载入模块）
 - `lsmod`: List modules（列出模块）
@@ -59,13 +59,13 @@
 
 ### 系统目录
 - `/bin`: BINaries（二进制程序文件）
-- `/dev`: DEVices（硬件驱动）
+- `/dev`: devices（设备节点）
 - `/etc`: ETCetera（目录存放着各种系统配置文件，类似于 windows 下的 system）
 - `/lib`: LIBrary（库文件）
 - `/proc`: PROCesses（进程信息）
 - `/sbin`: Superuser BINaries（超级用户二进制文件）
 - `/tmp`: TeMPorary（临时文件）
-- `/usr`: Unix Shared Resources（Unix 共享资源）
+- `/usr`: 历史上与 user 相关，现主要存放可共享、通常只读的系统程序与资源；“Unix Shared Resources”是后来的助记说法
 - `/var`: VARiable（可变数据）
 - `/boot`: boot（开机启动文件）
 
@@ -96,19 +96,19 @@
 
 ### 系统组件
 - `FIFO`: First In, First Out（先进先出）
-- `IFS`: Internal Field Seperators（内部字段分隔符）
+- `IFS`: Internal Field Separator（内部字段分隔符）
 - `VT`: Video Terminal（视频终端）
-- `daemon`: Disk And Execution MONitor（守护进程）
+- `daemon`: 守护进程；此词源于英语 daemon，并非 “Disk And Execution MONitor” 的缩写
 
 ### 开发工具
 - `bash`: Bourne Again SHell
-- `awk`: "Aho Weiberger and Kernighan" 三个作者的姓的第一个字母
+- `awk`: Aho、Weinberger、Kernighan 三位作者姓氏的首字母
 - `sed`: Stream EDitor（流编辑器）
 - `grep`: Global Regular Expression Print
 - `egrep`: Extended GREP
 - `fgrep`: Fixed GREP
 - `vim`: Vi IMproved
-- `vi`: VIsual = Very Inconvenient
+- `vi`: visual（可视化编辑器）；“Very Inconvenient”是戏称
 
 ### 网络协议
 - `SSH`: Secure SHell（安全外壳）
@@ -118,7 +118,7 @@
 
 ### 编程语言
 - `PHP`: Personal Home Page Tools = PHP Hypertext Preprocessor
-- `Perl`: "Pratical Extraction and Report Language" = "Pathologically Eclectic Rubbish Lister"
+- `Perl`: 语言名称；“Practical Extraction and Report Language”等是后来的反向缩写
 - `Python`: 得名于电视剧 Monty Python's Flying Circus
 - `Tcl`: Tool Command Language
 - `Tk`: ToolKit

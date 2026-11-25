@@ -59,9 +59,8 @@ chmod u+x file          # 给文件所有者增加执行权限
 
 #### 数字法示例
 ```bash
-# 执行：chmod u=rwx,g=rx,o=r filename
-# 就等同于：chmod u=7,g=5,o=4 filename
-# 可以简写为：chmod 754 filename
+# chmod u=rwx,g=rx,o=r filename 等价于：
+chmod 754 filename
 
 chmod 751 file          # 文件所有者：读、写、执行权限(7)
                         # 同组用户：读、执行的权限(5)
@@ -80,11 +79,11 @@ chmod 644 file          # 所有者：rw-，同组和其他：r--
 - `600`: rw------- (只有所有者读写)
 
 ### 递归修改权限
-如果想递归所有目录加上相同权限，需要加上参数 `-R`。
+`-R` 会递归修改目录及其中的文件。文件和目录通常不应一律设置相同权限；`777` 会向所有用户开放写入权限。
 
 ```bash
-chmod 777 test/ -R      # 递归 test 目录下所有文件加 777 权限
-chmod -R 755 directory   # 递归修改目录权限
+find directory -type d -exec chmod 755 {} +  # 目录可遍历
+find directory -type f -exec chmod 644 {} +  # 普通文件不额外授予执行权限
 ```
 
 ## chown 命令
@@ -138,6 +137,8 @@ umask 022                # 设置默认掩码
 umask                    # 查看当前掩码
 ```
 
+新建普通文件通常以 `666` 为基础，新建目录通常以 `777` 为基础，再屏蔽 umask 中的位。例如 `umask 022` 通常得到文件 `644`、目录 `755`；创建程序不会仅因 umask 而自动获得执行位。
+
 ## 常用参数
 - `chmod`: `-R` 递归
 - `chown`: `-R` 递归
@@ -159,7 +160,8 @@ chmod g=r file.txt
 # 修改权限（数字法）
 chmod 755 script.sh
 chmod 644 config.conf
-chmod 777 test/ -R
+find test -type d -exec chmod 755 {} +
+find test -type f -exec chmod 644 {} +
 
 # 修改所有者
 chown username file

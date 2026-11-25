@@ -12,6 +12,8 @@ iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 iptables -A INPUT -j DROP
 ```
 
+这些是 IPv4 `iptables` 的示意命令，直接执行最后一条可能切断 SSH 等现有连接。远程操作前先保留管理入口、允许已建立连接，并准备回滚方案；发行版可能使用 nftables、firewalld 或 ufw 管理规则，避免混用造成覆盖。
+
 ## firewalld (CentOS/RHEL)
 ```bash
 firewall-cmd --list-all

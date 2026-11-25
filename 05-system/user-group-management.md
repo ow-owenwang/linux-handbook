@@ -47,7 +47,7 @@ who -u                    # 在登录时间后显示该用户最后一次操作�
 - `-m` 或 `am I`: 只显示运行 who 命令的用户名、登录终端和登录时间
 - `-q` 或 `--count`: 只显示用户的登录账号和登录用户的数量
 - `-u`: 在登录时间后显示该用户最后一次操作到当前的时间间隔
-- `-u` 或 `--heading`: 显示列标题
+- `-H` 或 `--heading`: 显示列标题
 
 ### w
 查看登录当前系统的用户信息。与 who 命令相比，w 命令的功能更强大，它不但可以显示当前有哪些用户登录到系统，还可以显示这些用户正在进行的操作，并给出更加详细和科学的统计数据。
@@ -99,9 +99,7 @@ su - username            # 切换到普通用户，同时切换普通用户所�
 - `su -`: 切换到对应的用户时会将当前的工作目录自动转换到切换后的用户主目录
 
 **Ubuntu 平台注意**：
-- 如果是 ubuntu 平台，需要在命令前加 `sudo`
-- 如果在某些操作需要管理员才能操作，ubuntu 无需切换到 root 用户即可操作，只需加 `sudo` 即可
-- sudo 是 ubuntu 平台下允许系统管理员让普通用户执行一些或者全部的 root 命令的一个工具，减少了 root 用户的登陆和管理时间，提高了安全性
+- 在 Ubuntu 等系统上，管理员命令通常由获授权的用户通过 `sudo` 执行
 
 ### exit
 退出登录账户。
@@ -117,7 +115,7 @@ exit                     # 退出当前登录
 ## 添加用户账号
 
 ### useradd
-在 Unix/Linux 中添加用户账号可以使用 `adduser` 或 `useradd` 命令，因为 adduser 命令是指向 useradd 命令的一个链接，因此，这两个命令的使用格式完全一样。
+在 Debian/Ubuntu 上，`adduser` 通常是交互式前端，`useradd` 是底层命令，两者的选项和默认行为不同；其他发行版也可能另有实现。
 
 **使用格式**：
 ```bash
@@ -130,15 +128,14 @@ useradd [参数] 新建用户账号
 - `-g`: 指定组名称
 
 **相关说明**：
-- Linux 每个用户都要有一个主目录，主目录就是第一次登陆系统，用户的默认当前目录(/home/用户)
-- 每一个用户必须有一个主目录，所以用 useradd 创建用户的时候，一定给用户指定一个主目录
+- 账号会记录主目录路径，但系统账号可能没有实际创建的主目录；需要创建时使用 `useradd -m`
 - 用户的主目录一般要放到根目录的 home 目录下，用户的主目录和用户名是相同的
-- 如果创建用户的时候，不指定组名，那么系统会自动创建一个和用户名一样的组名
+- 未指定主组时是否自动创建同名组取决于发行版和 `/etc/login.defs` 等配置
 
 **常用命令**：
 ```bash
 useradd -d /home/abc abc -m        # 创建 abc 用户，如果 /home/abc 目录不存在，就自动创建这个目录，同时用户属于 abc 组
-useradd -d /home/a a -g test -m    # 创建一个用户名字叫 a，主目录在 /home/a，如果主目录不存在，就自动创建主目录，同时用户属于 test 组
+sudo useradd -m -d /home/a -g test a    # 创建一个用户名字叫 a，主目录在 /home/a，如果主目录不存在，就自动创建主目录，同时用户属于 test 组
 cat /etc/passwd                    # 查看系统当前用户名
 ```
 
@@ -227,17 +224,16 @@ su - root            # 启动一个新的登录会话，加载 root 用户的环
 ```
 
 ### 切换用户规则
-- 从权限高的用户切换到权限低的用户，不需要输入密码
-- 从权限低的用户切换到权限高的用户，需要输入密码
+- root 使用 `su` 切换用户通常不需要目标用户密码；普通用户使用 `su` 通常需要目标用户密码，是否允许切换还受 PAM 等配置影响
 - 当需要返回到原来用户时，使用 `exit` 或 `logout` 指令
 
 ## sudo 命令
 
 ### 功能
-`sudo` 是"以超级用户权限执行（superuser do）"的缩写。`sudo` 命令允许授权用户以超级用户（通常是 root）的权限执行特定命令。
+`sudo` 允许获授权用户以指定用户身份（默认 root）执行命令。
 
 ### 与 su 的区别
-- **权限需求**：`su` 需要知道目标用户的密码，而 `sudo` 需要知道当前用户的密码
+- **身份验证**：`su` 通常验证目标用户密码；`sudo` 通常验证调用者密码，但策略也可改变此行为
 - **权限范围**：`su` 切换到目标用户后，拥有的权限是完全的，相当于目标用户的权限；而 `sudo` 执行的命令可能只是特定命令以 root 权限执行，执行完该命令后会回到普通用户权限
 - **安全性**：`sudo` 提供了更多控制权限的灵活性，而且在日常管理中更为安全
 
@@ -260,7 +256,7 @@ example_user ALL=(ALL) /bin/ls, /usr/bin/apt-get update
 上面的配置指定了 `example_user` 在任何主机上，以任何用户身份（ALL）可以使用 `sudo` 执行 `/bin/ls` 和 `/usr/bin/apt-get update` 这两个命令。
 
 ### Ubuntu 平台
-如果是 ubuntu 平台，需要在命令前加 `sudo`。如果在某些操作需要管理员才能操作，ubuntu 无需切换到 root 用户即可操作，只需加 `sudo` 即可。sudo 是 ubuntu 平台下允许系统管理员让普通用户执行一些或者全部的 root 命令的一个工具，减少了 root 用户的登陆和管理时间，提高了安全性。
+在 Ubuntu 等系统上，获授权的用户可用 `sudo` 执行需要管理员权限的命令，无需切换到 root 会话。
 
 ## 查看用户 ID
 ```bash
@@ -288,9 +284,9 @@ su - username         # 切换到普通用户
 sudo command          # 以 root 权限执行命令
 
 # 创建用户
-useradd -d /home/abc abc -m
-useradd -d /home/a a -g test -m
-useradd test -d /home/t1
+sudo useradd -m -d /home/abc abc
+sudo useradd -m -d /home/a -g test a
+sudo useradd -m -d /home/t1 test
 
 # 设置密码
 passwd username
@@ -303,13 +299,13 @@ userdel -r abc        # 删除用户以及用户主目录（一般建议保留�
 # 组管理
 groupadd public       # 创建组
 useradd u1 -g public  # 创建用户指定组
-groupdel public       # 删除组（如果该组有用户成员，必须先删除用户才能删除组）
+sudo groupdel public   # 被用作用户主组时不能删除
 
 # 修改用户组
 usermod -g testgroup username
 
 # 查看用户信息
 cat /etc/passwd       # 用户文件
-cat /etc/shadow       # 密码文件
+sudo cat /etc/shadow  # 密码哈希文件，属于敏感信息
 cat /etc/group        # 组信息文件
 ```

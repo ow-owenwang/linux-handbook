@@ -1,119 +1,38 @@
-# 镜像源配置
+# 软件包镜像源
 
-## 常用场景
-- 加速软件包下载
-- 更换软件源
-- 配置国内镜像
+## 使用场景
 
-## Ubuntu 镜像源配置
+软件源下载缓慢或原镜像不可用时，可改用与**发行版、版本代号和架构**匹配的镜像。修改前确认镜像由可信机构运营并支持当前系统版本；不要把旧版本的仓库地址直接套到新系统。
 
-### 备份原配置
+## Debian / Ubuntu（APT）
+
+1. 查看发行版与代号：`cat /etc/os-release`。
+2. 检查实际启用的源：`grep -R -E '^(deb |URIs:)' /etc/apt/sources.list /etc/apt/sources.list.d/ 2>/dev/null`。较新的系统也可能使用 `.sources`（deb822）文件。
+3. 备份**实际使用的配置文件**，再把其中仓库 URI 改为镜像站为该版本提供的 URI。保留原有的 `Suites`、`Components` 和 `Signed-By` 等字段，除非镜像站的官方说明要求修改。
+4. 执行 `sudo apt update`，确认没有签名或索引错误，再安装或升级软件。
+
+第三方仓库应使用独立密钥文件和 `Signed-By` 限定其信任范围。`apt-key` 已弃用；切勿通过随意导入公钥来掩盖签名错误。系统官方仓库仅更换镜像域名时，通常沿用发行版提供的签名密钥。
+
+## RHEL 系（DNF / YUM）
+
+先查看 `/etc/os-release` 和 `/etc/yum.repos.d/` 中实际启用的仓库。备份对应 `.repo` 文件，再按镜像站**针对该发行版及版本**的说明修改 `baseurl` 或 `metalink`，保留 GPG 校验配置。随后执行：
+
 ```bash
-# 如果需要备份的话可以先备份
-cp /etc/apt/sources.list /etc/apt/sources.back
+sudo dnf clean all
+sudo dnf makecache
 ```
 
-### 编辑配置文件
-```bash
-vim /etc/apt/sources.list
-# 或者
-gedit /etc/apt/sources.list
-```
+旧系统使用 `yum` 时将上面的 `dnf` 换为 `yum`。仓库生命周期结束后，普通镜像可能已不提供该版本；应先确认发行版支持状态和升级路径。
 
-### 阿里云镜像源
-```plain
-# 阿里镜像
-deb http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse
-```
+## 核对
 
-### 清华大学镜像源
-```plain
-# 清华大学
-deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ trusty main restricted universe multiverse
-deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ trusty-security main restricted universe multiverse
-deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ trusty-updates main restricted universe multiverse
-deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ trusty-backports main restricted universe multiverse
-deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ trusty-proposed main restricted universe multiverse
-deb-src http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ trusty main restricted universe multiverse
-deb-src http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ trusty-security main restricted universe multiverse
-deb-src http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ trusty-updates main restricted universe multiverse
-deb-src http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ trusty-backports main restricted universe multiverse
-deb-src http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ trusty-proposed main restricted universe multiverse
-```
+- `apt update` 或 `dnf makecache` 失败时，先检查版本代号、URL、证书、签名和网络连接。
+- 不要为完成更新而关闭仓库签名校验。
+- 源配置格式与路径以当前发行版提供的文件和文档为准。
 
-**注意**：上面的 `trusty` 是 Ubuntu 版本代号，需要根据你的 Ubuntu 版本替换为对应的代号（如：focal、jammy 等）。
-
-### 设置公钥
-```bash
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
-```
-
-### 更新源
-```bash
-sudo apt-get update
-```
-
-## CentOS/RHEL 镜像源配置
-
-### 备份原配置
-```bash
-cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
-```
-
-### 使用阿里云镜像
-```bash
-# 下载阿里云镜像源配置
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
-
-# 清理缓存
-yum clean all
-
-# 生成缓存
-yum makecache
-```
-
-## 常用镜像源
-
-### 国内镜像源
-- **阿里云**：http://mirrors.aliyun.com
-- **清华大学**：http://mirrors.tuna.tsinghua.edu.cn
-- **中科大**：http://mirrors.ustc.edu.cn
-- **网易**：http://mirrors.163.com
-
-### 选择建议
-- 根据地理位置选择最近的镜像源
-- 企业环境建议使用稳定的镜像源
-- 定期更新镜像源配置
-
-## 易错点
-- 修改镜像源后必须执行 `apt-get update` 或 `yum makecache`
-- Ubuntu 版本代号需要匹配，否则可能无法使用
-- 修改前建议备份原配置文件
-
-## 实战示例
-```bash
-# Ubuntu 配置阿里云镜像
-sudo cp /etc/apt/sources.list /etc/apt/sources.list.backup
-sudo vim /etc/apt/sources.list
-# 编辑内容...
-sudo apt-get update
-
-# CentOS 配置阿里云镜像
-sudo cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
-sudo wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
-sudo yum clean all
-sudo yum makecache
-```
+参考：[APT sources.list 手册](https://manpages.debian.org/unstable/apt/sources.list.5.en.html)、[APT apt-key 手册](https://manpages.debian.org/unstable/apt/apt-key.8.en.html)。
 
 ## 延伸阅读
-- [apt-yum-dnf.md](./apt-yum-dnf.md) - 包管理命令
-- [rpm-dpkg.md](./rpm-dpkg.md) - 底层包管理
+
+- [apt-yum-dnf.md](./apt-yum-dnf.md)
+- [rpm-dpkg.md](./rpm-dpkg.md)

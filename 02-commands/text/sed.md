@@ -23,7 +23,7 @@ sed '/pattern/d' file
 
 ## 实战示例
 ```bash
-sed 's/127.0.0.1/localhost/g' /etc/hosts
+sed 's/127\.0\.0\.1/localhost/g' /etc/hosts
 sed -i '/^#/d' config.conf
 ```
 

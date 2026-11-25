@@ -9,8 +9,9 @@ find . -name "*.log"      # 查找文件
 
 ## 进程
 ```bash
-ps aux | grep xxx         # 查找进程
-kill -9 PID               # 强制终止
+pgrep -af xxx             # 按名称查找进程（Linux）
+kill PID                  # 先发送 TERM，允许进程清理
+kill -KILL PID            # 确认无法正常退出时再强制终止
 top                       # 实时查看进程
 ```
 
@@ -24,7 +25,7 @@ netstat -an | grep ESTABLISHED
 ## 包管理
 ```bash
 apt update && apt upgrade  # Debian/Ubuntu
-yum install package       # CentOS/RHEL
+sudo dnf install package  # 较新的 RHEL 系；旧系统可能用 yum
 ```
 
 ## 系统信息

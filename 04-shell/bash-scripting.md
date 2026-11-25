@@ -36,9 +36,9 @@ Shebang（或 Hashbang）是一种特殊的注释，通常位于脚本文件的�
 
 **格式示例**：
 ```bash
-#!/bin/bash              # 使用 Bash 解释器
-#!/usr/bin/env python    # 使用 Python 解释器（推荐，更灵活）
-#!/usr/bin/env node      # 使用 Node.js 解释器
+#!/bin/bash
+#!/usr/bin/env python3
+#!/usr/bin/env node
 ```
 
 **功能**：
@@ -46,8 +46,7 @@ Shebang（或 Hashbang）是一种特殊的注释，通常位于脚本文件的�
 - 使得用户可以直接运行脚本文件，而无需显式调用解释器
 
 **使用场景**：
-- 在 Web 开发中，shebang 常用于重定向请求到特定的脚本或程序
-- 在 Web 服务器配置中，shebang 也可以用来指定处理特定文件类型的脚本
+- 在直接执行脚本（如 `./script.sh`）时，系统根据 shebang 选择解释器；使用 `bash script.sh` 时由显式指定的 Bash 解释
 
 ## 常用语法
 - 变量: `VAR=value`, `$VAR`
@@ -62,7 +61,7 @@ Shebang（或 Hashbang）是一种特殊的注释，通常位于脚本文件的�
 
 ```bash
 # 只有在 && 左边的命令返回真（命令返回值 $? == 0），&& 右边的命令才会被执行
-# 只要有一个命令返回假（命令返回值 $? == 1），后面的命令就不会被执行
+# 非零退出状态表示失败，不限于 1
 mkdir test && cd test
 ```
 

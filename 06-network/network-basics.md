@@ -11,9 +11,9 @@
 - DNS
 
 ## 网络配置文件
-- `/etc/network/interfaces`: Debian/Ubuntu
-- `/etc/sysconfig/network-scripts/`: CentOS/RHEL
-- `/etc/resolv.conf`: DNS 配置
+- `/etc/network/interfaces`: 部分 Debian 系统使用；Ubuntu 常见 Netplan 或 NetworkManager
+- `/etc/sysconfig/network-scripts/`: 较旧 RHEL 系系统使用；新系统常见 NetworkManager
+- `/etc/resolv.conf`: 解析器配置，可能由 systemd-resolved、NetworkManager 等自动生成
 
 ## 常用命令
 ```bash
@@ -24,7 +24,7 @@ ifconfig                # 显示或设置网络设备
 
 ## ifconfig 基本用法
 ```bash
-ifconfig                # 显示所有网络设备
+ifconfig                # 显示已启用接口（需安装 net-tools）
 ifconfig eth0           # 显示指定网卡信息
 ifconfig eth0 up        # 启用 eth0 网卡
 ifconfig eth0 down      # 停用 eth0 网卡
